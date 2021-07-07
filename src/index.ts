@@ -37,7 +37,7 @@ export default class DataSet {
   indexes: any = {};
   db: any[] = [];
   options: Options;
-
+  
   constructor(
     data: any[],
     options: Options = { found: true, autoIndex: true }
@@ -50,6 +50,10 @@ export default class DataSet {
     }
     this.load(data);
   }
+  /** @method createIndex creates indices based on the keys of the object passed in the first argument (takes only one argument)*/
+  /** @param obj The keys of the object passed .*/
+  /** @param path internal argument  */
+
   createIndex = function (obj: any, path = "") {
     for (let key in obj) {
       if (typeof obj[key] == "object" && !isId(obj[key]) && !isDate(obj[key])) {
@@ -79,6 +83,7 @@ export default class DataSet {
       }
     }
   };
+        /**  @method index internal method */
   index = function (obj: any, path = "") {
     for (let key in obj) {
       if (typeof obj[key] == "object" && !isId(obj[key]) && !isDate(obj[key])) {
@@ -116,6 +121,7 @@ export default class DataSet {
       }
     }
   };
+      /**  @method find internal method */
   find = function (obj: any, path = "") {
     for (let key in obj) {
       if (typeof obj[key] == "object" && !isId(obj[key]) && !isDate(obj[key])) {
@@ -142,6 +148,7 @@ export default class DataSet {
     }
     return;
   };
+      /**  @method intersect internal method */
   intersect = function (arrays = this.stores) {
     if (!arrays.length) return [];
     let a = arrays[0];
@@ -154,6 +161,8 @@ export default class DataSet {
     });
     return;
   };
+    /**  @method search searchs for documents with matching keys */
+    /**  @param arg object with keys to be matched */
   search = function (arg: any) {
     this.find(arg);
     this.intersect();
@@ -164,6 +173,7 @@ export default class DataSet {
     this.res = [];
     return res;
   };
+  /**  @method whereFound data that was not found in any search before flushing */
   whereFound = () => {
     if (!this.options.found)
       throw "choose found:true in options when creating data set to enable whereFound/whereNotFound methods";
@@ -171,6 +181,7 @@ export default class DataSet {
     this.found.forEach((i: any) => res.push(this.db[i]));
     return res;
   };
+  /**  @method whereNotFound data that was not found in any search before flushing */
   whereNotFound = () => {
     if (!this.options.found)
       throw "choose found:true in options when creating data set to enable whereFound/whereNotFound methods";
@@ -180,4 +191,9 @@ export default class DataSet {
     full.forEach((i) => res.push(this.db[i]));
     return res;
   };
+  flush =()=>{
+    this.found = new Set();
+    this.res = [];
+    this.stores = [];
+  }
 }
