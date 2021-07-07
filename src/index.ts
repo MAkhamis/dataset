@@ -36,7 +36,7 @@ export default class DataSet {
   counter: number = 0;
   indexes: any = {};
   db: any[] = [];
-  options: Options 
+  options: Options;
 
   constructor(
     data: any[],
@@ -166,12 +166,14 @@ export default class DataSet {
   };
   whereFound = () => {
     if (!this.options.found)
-      throw "chosse found:true in options when creating data set to enable whereFound/whereNotFound methods";
+      throw "choose found:true in options when creating data set to enable whereFound/whereNotFound methods";
     let res: any[] = [];
     this.found.forEach((i: any) => res.push(this.db[i]));
     return res;
   };
   whereNotFound = () => {
+    if (!this.options.found)
+      throw "choose found:true in options when creating data set to enable whereFound/whereNotFound methods";
     let res: any[] = [];
     let full = new Set(this.db.keys());
     this.found.forEach((i: any) => full.delete(i));
