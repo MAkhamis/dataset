@@ -1,26 +1,27 @@
-
 const oId = /^[a-f\d]{24}$/i;
-function isId  (id:any)  {
+function isId(id: any) {
   try {
     return oId.test(id.toString());
   } catch (e) {
     return false;
   }
-};
- interface Options{
-    found: boolean, autoIndex: boolean
 }
-const isDate = (d:any) => Object.prototype.toString.call(d) === "[object Date]";
+interface Options {
+  found: boolean;
+  autoIndex: boolean;
+}
+const isDate = (d: any) =>
+  Object.prototype.toString.call(d) === "[object Date]";
 export default class DataSet {
-  load = function load(data:any[]) {
+  load = function load(data: any[]) {
     this.db = data;
     if (!Array.isArray(data)) {
       console.error("DataSet type must be an array");
       return;
     }
-    for (let i:number = 0; i < data.length; i++) {
+    for (let i: number = 0; i < data.length; i++) {
       this.counter = i;
-      let d:any = data[i];
+      let d: any = data[i];
       if (typeof d != "object") {
         console.error("DataSet elements must be objects");
         return;
@@ -30,15 +31,18 @@ export default class DataSet {
     }
   };
   found = new Set();
-  res:any[] = [];
-  stores:any[] = [];
-  counter:number = 0;
-  indexes:any = {};
-  db :any[]=[];
-  options:Options =    {found: true, autoIndex: true};
+  res: any[] = [];
+  stores: any[] = [];
+  counter: number = 0;
+  indexes: any = {};
+  db: any[] = [];
+  options: Options = { found: true, autoIndex: true };
 
-  constructor(data:any[], options:Options = { found: true, autoIndex: true }) {
-    options = options;
+  constructor(
+    data: any[],
+    options: Options = { found: true, autoIndex: true }
+  ) {
+    this.options = options;
     if (data) this.db = data;
     if (data && !Array.isArray(data)) {
       console.error("DataSet type must be an array");
@@ -46,7 +50,7 @@ export default class DataSet {
     }
     this.load(data);
   }
-  createIndex = function (obj:any, path = "") {
+  createIndex = function (obj: any, path = "") {
     for (let key in obj) {
       if (typeof obj[key] == "object" && !isId(obj[key]) && !isDate(obj[key])) {
         let p = `${key}`;
@@ -75,8 +79,7 @@ export default class DataSet {
       }
     }
   };
-  index = function (obj:any, path = "") {
-
+  index = function (obj: any, path = "") {
     for (let key in obj) {
       if (typeof obj[key] == "object" && !isId(obj[key]) && !isDate(obj[key])) {
         let p = `${key}`;
@@ -113,7 +116,7 @@ export default class DataSet {
       }
     }
   };
-  find = function (obj:any, path="") {
+  find = function (obj: any, path = "") {
     for (let key in obj) {
       if (typeof obj[key] == "object" && !isId(obj[key]) && !isDate(obj[key])) {
         let p = `${key}`;
@@ -142,7 +145,7 @@ export default class DataSet {
   intersect = function (arrays = this.stores) {
     if (!arrays.length) return [];
     let a = arrays[0];
-    this.res = a.filter((value:any) => {
+    this.res = a.filter((value: any) => {
       for (let i = 1; i < arrays.length; i++) {
         let b = arrays[i];
         if (!b.includes(value)) return false;
@@ -151,11 +154,11 @@ export default class DataSet {
     });
     return;
   };
-  search = function (arg:any) {
+  search = function (arg: any) {
     this.find(arg);
     this.intersect();
-    let res:any[] = [];
-    this.res.forEach((i:number) => res.push(this.db[i]));
+    let res: any[] = [];
+    this.res.forEach((i: number) => res.push(this.db[i]));
     this.stores = [];
     this.options.found ? this.found.add(...this.res) : 0;
     this.res = [];
@@ -164,14 +167,14 @@ export default class DataSet {
   whereFound = () => {
     if (!this.options.found)
       throw "chosse found:true in options when creating data set to enable whereFound/whereNotFound methods";
-    let res:any[] = [];
-    this.found.forEach((i:any) => res.push(this.db[i]));
+    let res: any[] = [];
+    this.found.forEach((i: any) => res.push(this.db[i]));
     return res;
   };
   whereNotFound = () => {
-    let res :any[]= [];
+    let res: any[] = [];
     let full = new Set(this.db.keys());
-    this.found.forEach((i:any) => full.delete(i));
+    this.found.forEach((i: any) => full.delete(i));
     full.forEach((i) => res.push(this.db[i]));
     return res;
   };
