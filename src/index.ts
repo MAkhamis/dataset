@@ -36,7 +36,7 @@ export default class DataSet {
   counter: number = 0;
   indexes: any = {};
   db: any[] = [];
-  options: Options = { found: true, autoIndex: true };
+  options: Options 
 
   constructor(
     data: any[],
