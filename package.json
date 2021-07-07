@@ -19,8 +19,8 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@babel/parser": "^7.14.7",
-    "lodash": "^4.17.15"
+    "@babel/parser": "^7.14.7"
+
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,8 @@
   },
   "devDependencies": {
     "prettier": "2.1.2",
-    "typescript": "^4.3.4"
+    "typescript": "^4.3.4",
+    "mongoose": "^5.13.2"
   },
   "build": "tsc"
 }
