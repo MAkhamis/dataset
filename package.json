@@ -1,7 +1,7 @@
 {
   "name": "data-set-query",
   "description": "Data set querying via hasing and indexing with Auto Index ability",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "homepage": "",
   "keywords": [],
   "author": {
