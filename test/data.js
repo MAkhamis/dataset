@@ -1,6 +1,6 @@
 import mongodb from "mongodb";
-let ObjectId = d => mongodb.ObjectId(d);
-let ISODate = d => Date(d);
+let ObjectId = (d) => mongodb.ObjectId(d);
+let ISODate = (d) => Date(d);
 export default [
   {
     _id: ObjectId("5e4e712e9c9f17288d6e0b11"),
@@ -42,7 +42,7 @@ export default [
       category: {
         _id: ObjectId("5e1ece6335e42053121b4ff3"),
         name: "cat1",
-        type: "main"
+        type: "main",
       },
       sku: "",
       serial_no: "",
@@ -56,8 +56,8 @@ export default [
         {
           name: "piece",
           piece: 1,
-          _id: ObjectId("5e369b09d4b0fb60e1379576")
-        }
+          _id: ObjectId("5e369b09d4b0fb60e1379576"),
+        },
       ],
       price_list: [],
       company_namespace: ["gard"],
@@ -65,11 +65,11 @@ export default [
       createdAt: ISODate("2020-02-02T09:48:57.928Z"),
       updatedAt: ISODate("2020-10-11T10:51:03.002Z"),
       measureunit_family: null,
-      channel: null
+      channel: null,
     },
     __v: 0,
     createdAt: ISODate("2020-02-20T11:44:46.404Z"),
-    updatedAt: ISODate("2020-02-20T11:44:46.404Z")
+    updatedAt: ISODate("2020-02-20T11:44:46.404Z"),
   },
   {
     _id: ObjectId("5e4e71319c9f17288d6e0b34"),
@@ -121,8 +121,8 @@ export default [
         {
           name: "piece",
           piece: 1,
-          _id: ObjectId("5e369b09d4b0fb60e1379588")
-        }
+          _id: ObjectId("5e369b09d4b0fb60e1379588"),
+        },
       ],
       price_list: [],
       company_namespace: ["gard"],
@@ -130,11 +130,11 @@ export default [
       createdAt: ISODate("2020-02-02T09:48:57.929Z"),
       updatedAt: ISODate("2020-10-11T10:51:03.002Z"),
       measureunit_family: null,
-      channel: null
+      channel: null,
     },
     __v: 0,
     createdAt: ISODate("2020-02-20T11:44:49.561Z"),
-    updatedAt: ISODate("2020-02-20T11:44:49.561Z")
+    updatedAt: ISODate("2020-02-20T11:44:49.561Z"),
   },
   {
     _id: ObjectId("5e4e71489c9f17288d6e0c23"),
@@ -186,8 +186,8 @@ export default [
         {
           name: "piece",
           piece: 1,
-          _id: ObjectId("5e369b09d4b0fb60e1379752")
-        }
+          _id: ObjectId("5e369b09d4b0fb60e1379752"),
+        },
       ],
       price_list: [],
       company_namespace: ["gard"],
@@ -195,11 +195,11 @@ export default [
       createdAt: ISODate("2020-02-02T09:48:57.952Z"),
       updatedAt: ISODate("2020-10-11T10:51:03.002Z"),
       measureunit_family: null,
-      channel: null
+      channel: null,
     },
     __v: 0,
     createdAt: ISODate("2020-02-20T11:45:12.077Z"),
-    updatedAt: ISODate("2020-02-20T11:45:12.077Z")
+    updatedAt: ISODate("2020-02-20T11:45:12.077Z"),
   },
   {
     _id: ObjectId("5e4e71499c9f17288d6e0c35"),
@@ -251,8 +251,8 @@ export default [
         {
           name: "piece",
           piece: 1,
-          _id: ObjectId("5e369b09d4b0fb60e1379736")
-        }
+          _id: ObjectId("5e369b09d4b0fb60e1379736"),
+        },
       ],
       price_list: [],
       company_namespace: ["gard"],
@@ -260,10 +260,10 @@ export default [
       createdAt: ISODate("2020-02-02T09:48:57.951Z"),
       updatedAt: ISODate("2020-10-11T10:51:03.002Z"),
       measureunit_family: null,
-      channel: null
+      channel: null,
     },
     __v: 0,
     createdAt: ISODate("2020-02-20T11:45:13.636Z"),
-    updatedAt: ISODate("2020-02-20T11:45:13.636Z")
-  }
+    updatedAt: ISODate("2020-02-20T11:45:13.636Z"),
+  },
 ];

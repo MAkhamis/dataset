@@ -3,7 +3,7 @@ import DATA from "./data.js";
 import DataSet from "./../lib/index.js";
 //DATA.splice(5, DATA.length - 1);
 //console.log(DATA);
-let ObjectId = d => mongodb.ObjectId; // Types.ObjectId(d); //d.toString()
+let ObjectId = (d) => mongodb.ObjectId; // Types.ObjectId(d); //d.toString()
 console.log("full length", DATA.length);
 
 console.time("loading");
@@ -15,7 +15,7 @@ db.createIndex({
   height: 10,
   company_namespace: ["japatest"],
   product: { description: "desc" },
-  barcode: 1
+  barcode: 1,
 });
 db.load(DATA);
 console.log("indexes");
@@ -31,7 +31,7 @@ for (let key in used) {
 let res2 = db.search({
   // _id: ObjectId("60e432ac44ed176f20753369"),
   height: 10,
-  barcode: "054881000468"
+  barcode: "054881000468",
   //  company_namespace: ["japatest"],
   //  product: { description: "desc" },
 });

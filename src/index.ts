@@ -9,11 +9,13 @@ function isId(id: any) {
 interface Options {
   found: boolean;
   autoIndex: boolean;
+  ignoreUnIndexed: boolean;
 }
 const isDate = (d: any) =>
   Object.prototype.toString.call(d) === "[object Date]";
 export default class DataSet {
   load = function load(data: any[]) {
+    if (this.loaded) throw `Loading is not permitted after first loading`;
     this.db = data;
     if (!Array.isArray(data)) {
       console.error("DataSet type must be an array");
@@ -29,6 +31,7 @@ export default class DataSet {
       this.index(d);
       //   this.data.push(d);
     }
+    this.loaded = true;
   };
   found = new Set();
   res: any[] = [];
@@ -37,72 +40,53 @@ export default class DataSet {
   indexes: any = {};
   db: any[] = [];
   options: Options;
-  
+  loaded: boolean = false;
+
   constructor(
     data: any[],
-    options: Options = { found: true, autoIndex: true }
+    options: Options = { found: true, autoIndex: true, ignoreUnIndexed: false }
   ) {
-    this.options = options;
-    if (data) this.db = data;
-    if (data && !Array.isArray(data)) {
-      console.error("DataSet type must be an array");
-      return;
+    try {
+      this.options = options;
+      if (data) this.db = data;
+      if (data && !Array.isArray(data)) {
+        console.error("DataSet type must be an array");
+        return;
+      }
+      this.load(data);
+    } catch (e) {
+      console.error(e);
+      throw e;
     }
-    this.load(data);
   }
   /** @method createIndex creates indices based on the keys of the object passed in the first argument (takes only one argument)*/
   /** @param obj The keys of the object passed .*/
   /** @param path internal argument  */
 
   createIndex = function (obj: any, path = "") {
-    for (let key in obj) {
-      if (typeof obj[key] == "object" && !isId(obj[key]) && !isDate(obj[key])) {
-        let p = `${key}`;
-        let _obj = obj[key];
-        this.createIndex(_obj, path?.length ? `${path}.${p}` : p);
-      } else {
-        let _path = path?.length ? `${path}.` : "";
-        if (this.indexes[`${_path}${key}`]) {
-          let k = this.counter;
-          let v =
-            isId(obj[key]) || isDate(obj[key]) ? obj[key].toString() : obj[key];
-          if (this.indexes[`${_path}${key}`][v] != undefined) {
-          } else {
-            this.indexes[`${_path}${key}`][v] = [];
-          }
+    try {
+      for (let key in obj) {
+        if (
+          typeof obj[key] == "object" &&
+          !isId(obj[key]) &&
+          !isDate(obj[key])
+        ) {
+          let p = `${key}`;
+          let _obj = obj[key];
+          this.createIndex(_obj, path?.length ? `${path}.${p}` : p);
         } else {
-          let k = this.counter;
-          let v =
-            isId(obj[key]) || isDate(obj[key]) ? obj[key].toString() : obj[key];
-          this.indexes[`${_path}${key}`] = {};
-          if (this.indexes[`${_path}${key}`][v] != undefined) {
+          let _path = path?.length ? `${path}.` : "";
+          if (this.indexes[`${_path}${key}`]) {
+            let k = this.counter;
+            let v =
+              isId(obj[key]) || isDate(obj[key])
+                ? obj[key].toString()
+                : obj[key];
+            if (this.indexes[`${_path}${key}`][v] != undefined) {
+            } else {
+              this.indexes[`${_path}${key}`][v] = [];
+            }
           } else {
-            this.indexes[`${_path}${key}`][v] = [];
-          }
-        }
-      }
-    }
-  };
-        /**  @method index internal method */
-  index = function (obj: any, path = "") {
-    for (let key in obj) {
-      if (typeof obj[key] == "object" && !isId(obj[key]) && !isDate(obj[key])) {
-        let p = `${key}`;
-        let _obj = obj[key];
-        this.index(_obj, path?.length ? `${path}.${p}` : p);
-      } else {
-        let _path = path?.length ? `${path}.` : "";
-        if (this.indexes[`${_path}${key}`]) {
-          let k = this.counter;
-          let v =
-            isId(obj[key]) || isDate(obj[key]) ? obj[key].toString() : obj[key];
-          if (this.indexes[`${_path}${key}`][v] != undefined) {
-            this.indexes[`${_path}${key}`][v].push(k);
-          } else {
-            this.indexes[`${_path}${key}`][v] = [k];
-          }
-        } else {
-          if (this.options.autoIndex) {
             let k = this.counter;
             let v =
               isId(obj[key]) || isDate(obj[key])
@@ -110,90 +94,175 @@ export default class DataSet {
                 : obj[key];
             this.indexes[`${_path}${key}`] = {};
             if (this.indexes[`${_path}${key}`][v] != undefined) {
+            } else {
+              this.indexes[`${_path}${key}`][v] = [];
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  };
+  /**  @method index internal method */
+  index = function (obj: any, path = "") {
+    try {
+      for (let key in obj) {
+        if (
+          typeof obj[key] == "object" &&
+          !isId(obj[key]) &&
+          !isDate(obj[key])
+        ) {
+          let p = `${key}`;
+          let _obj = obj[key];
+          this.index(_obj, path?.length ? `${path}.${p}` : p);
+        } else {
+          let _path = path?.length ? `${path}.` : "";
+          if (this.indexes[`${_path}${key}`]) {
+            let k = this.counter;
+            let v =
+              isId(obj[key]) || isDate(obj[key])
+                ? obj[key].toString()
+                : obj[key];
+            if (this.indexes[`${_path}${key}`][v] != undefined) {
               this.indexes[`${_path}${key}`][v].push(k);
             } else {
               this.indexes[`${_path}${key}`][v] = [k];
             }
           } else {
-            // throw `As no Auto Indexing is activated , searching on un indexed key ${_path}${key} is not allowed `;
+            if (this.options.autoIndex) {
+              let k = this.counter;
+              let v =
+                isId(obj[key]) || isDate(obj[key])
+                  ? obj[key].toString()
+                  : obj[key];
+              this.indexes[`${_path}${key}`] = {};
+              if (this.indexes[`${_path}${key}`][v] != undefined) {
+                this.indexes[`${_path}${key}`][v].push(k);
+              } else {
+                this.indexes[`${_path}${key}`][v] = [k];
+              }
+            } else {
+              // throw `As no Auto Indexing is activated , searching on un indexed key ${_path}${key} is not allowed `;
+            }
           }
         }
       }
+    } catch (e) {
+      console.error(e);
+      throw e;
     }
   };
-      /**  @method find internal method */
+  /**  @method find internal method */
   find = function (obj: any, path = "") {
-    for (let key in obj) {
-      if (typeof obj[key] == "object" && !isId(obj[key]) && !isDate(obj[key])) {
-        let p = `${key}`;
-        let _obj = obj[key];
-        this.find(_obj, path?.length ? `${path}.${p}` : p);
-      } else {
-        let _path = path?.length ? `${path}.` : "";
-        if (this.indexes[`${_path}${key}`]) {
-          let k = this.counter;
-          let v =
-            isId(obj[key]) || isDate(obj[key]) ? obj[key].toString() : obj[key];
-          if (this.indexes[`${_path}${key}`][v]) {
-            this.stores.push(this.indexes[`${_path}${key}`][v]);
-          } else {
-            this.stores.push([]);
+    try {
+      for (let key in obj) {
+        if (
+          typeof obj[key] == "object" &&
+          !isId(obj[key]) &&
+          !isDate(obj[key])
+        ) {
+          let p = `${key}`;
+          let _obj = obj[key];
+          this.find(_obj, path?.length ? `${path}.${p}` : p);
+        } else {
+          let _path = path?.length ? `${path}.` : "";
+          if (this.indexes[`${_path}${key}`]) {
+            let k = this.counter;
+            let v =
+              isId(obj[key]) || isDate(obj[key])
+                ? obj[key].toString()
+                : obj[key];
+            if (this.indexes[`${_path}${key}`][v]) {
+              this.stores.push(this.indexes[`${_path}${key}`][v]);
+            } else {
+              this.stores.push([]);
+              return;
+            }
+          } else if (!this.options.ignoreUnIndexed) {
+            throw `index not found for key ${_path}${key} `;
             return;
           }
-        } else {
-          throw `index not found for key ${_path}${key} `;
-          return;
         }
       }
+      return;
+    } catch (e) {
+      console.error(e);
+      throw e;
     }
-    return;
   };
-      /**  @method intersect internal method */
+  /**  @method intersect internal method */
   intersect = function (arrays = this.stores) {
-    if (!arrays.length) return [];
-    let a = arrays[0];
-    this.res = a.filter((value: any) => {
-      for (let i = 1; i < arrays.length; i++) {
-        let b = arrays[i];
-        if (!b.includes(value)) return false;
-      }
-      return true;
-    });
-    return;
+    try {
+      if (!arrays.length) return [];
+      let a = arrays[0];
+      this.res = a.filter((value: any) => {
+        for (let i = 1; i < arrays.length; i++) {
+          let b = arrays[i];
+          if (!b.includes(value)) return false;
+        }
+        return true;
+      });
+      return;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   };
-    /**  @method search searchs for documents with matching keys */
-    /**  @param arg object with keys to be matched */
+  /**  @method search searchs for documents with matching keys */
+  /**  @param arg object with keys to be matched */
   search = function (arg: any) {
-    this.find(arg);
-    this.intersect();
-    let res: any[] = [];
-    this.res.forEach((i: number) => res.push(this.db[i]));
-    this.stores = [];
-    this.options.found ? this.found.add(...this.res) : 0;
-    this.res = [];
-    return res;
+    try {
+      this.find(arg);
+      this.intersect();
+      let res: any[] = [];
+      this.res.forEach((i: number) => res.push(this.db[i]));
+      this.stores = [];
+      this.options.found ? this.found.add(...this.res) : 0;
+      this.res = [];
+      return res;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   };
   /**  @method whereFound data that was not found in any search before flushing */
   whereFound = () => {
-    if (!this.options.found)
-      throw "choose found:true in options when creating data set to enable whereFound/whereNotFound methods";
-    let res: any[] = [];
-    this.found.forEach((i: any) => res.push(this.db[i]));
-    return res;
+    try {
+      if (!this.options.found)
+        throw "choose found:true in options when creating data set to enable whereFound/whereNotFound methods";
+      let res: any[] = [];
+      this.found.forEach((i: any) => res.push(this.db[i]));
+      return res;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   };
   /**  @method whereNotFound data that was not found in any search before flushing */
   whereNotFound = () => {
-    if (!this.options.found)
-      throw "choose found:true in options when creating data set to enable whereFound/whereNotFound methods";
-    let res: any[] = [];
-    let full = new Set(this.db.keys());
-    this.found.forEach((i: any) => full.delete(i));
-    full.forEach((i) => res.push(this.db[i]));
-    return res;
+    try {
+      if (!this.options.found)
+        throw "choose found:true in options when creating data set to enable whereFound/whereNotFound methods";
+      let res: any[] = [];
+      let full = new Set(this.db.keys());
+      this.found.forEach((i: any) => full.delete(i));
+      full.forEach((i) => res.push(this.db[i]));
+      return res;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   };
-  flush =()=>{
-    this.found = new Set();
-    this.res = [];
-    this.stores = [];
-  }
+  flush = () => {
+    try {
+      this.found = new Set();
+      this.res = [];
+      this.stores = [];
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  };
 }
