@@ -15,23 +15,28 @@ const isDate = (d: any) =>
   Object.prototype.toString.call(d) === "[object Date]";
 export default class DataSet {
   load = function load(data: any[]) {
-    if (this.loaded) throw `Loading is not permitted after first loading`;
-    this.db = data;
-    if (!Array.isArray(data)) {
-      console.error("DataSet type must be an array");
-      return;
-    }
-    for (let i: number = 0; i < data.length; i++) {
-      this.counter = i;
-      let d: any = data[i];
-      if (typeof d != "object") {
-        console.error("DataSet elements must be objects");
+    try {
+      if (this.loaded) throw `Loading is not permitted after first loading`;
+      this.db = data;
+      if (!Array.isArray(data)) {
+        console.error("DataSet type must be an array");
         return;
       }
-      this.index(d);
-      //   this.data.push(d);
+      for (let i: number = 0; i < data.length; i++) {
+        this.counter = i;
+        let d: any = data[i];
+        if (typeof d != "object") {
+          console.error("DataSet elements must be objects");
+          return;
+        }
+        this.index(d);
+        //   this.data.push(d);
+      }
+      if (data.length) this.loaded = true;
+    } catch (e) {
+      console.error(e);
+      throw e;
     }
-    this.loaded = true;
   };
   found = new Set();
   res: any[] = [];
