@@ -1,12 +1,12 @@
 {
   "name": "data-set-query",
   "description": "Data set querying via hasing and indexing with Auto Index ability",
-  "version": "0.0.3",
+  "version": "0.0.7",
   "homepage": "",
   "keywords": [],
   "author": {
     "name": "mohammad Khamis",
-    "email": "mohammad.khamis@repzoapp.com"
+    "email": "mohammad.khamis@corpapp.com"
   },
   "contributors": [],
   "main": "lib",
@@ -28,7 +28,7 @@
   "devDependencies": {
     "prettier": "2.1.2",
     "typescript": "^4.3.4",
-    "mongoose": "^5.13.2"
+    "mongodb": "3.6.10"
   },
   "build": "tsc"
 }
