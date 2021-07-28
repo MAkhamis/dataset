@@ -7,9 +7,9 @@ function isId(id: any) {
   }
 }
 interface Options {
-  found: boolean;
-  autoIndex: boolean;
-  ignoreUnIndexed: boolean;
+  found?: boolean;
+  autoIndex?: boolean;
+  ignoreUnIndexed?: boolean;
 }
 const isDate = (d: any) =>
   Object.prototype.toString.call(d) === "[object Date]";
