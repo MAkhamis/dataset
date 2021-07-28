@@ -7,8 +7,9 @@ function isId(id: any) {
   }
 }
 interface Options {
-  found: boolean;
-  autoIndex: boolean;
+  found?: boolean;
+  autoIndex?: boolean;
+  ignoreUnIndexed?: boolean;
 }
 const isDate = (d: any) =>
   Object.prototype.toString.call(d) === "[object Date]";
@@ -36,7 +37,7 @@ export default class DataSet {
   counter: number = 0;
   indexes: any = {};
   db: any[] = [];
-  options: Options 
+  options: Options;
 
   constructor(
     data: any[],

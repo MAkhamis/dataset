@@ -1,6 +1,7 @@
 interface Options {
-    found: boolean;
-    autoIndex: boolean;
+    found?: boolean;
+    autoIndex?: boolean;
+    ignoreUnIndexed?: boolean;
 }
 export default class DataSet {
     load: (data: any[]) => void;
