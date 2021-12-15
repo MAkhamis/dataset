@@ -73,6 +73,7 @@ export default class DataSet {
       for (let key in obj) {
         if (
           typeof obj[key] == "object" &&
+          obj[key] !== null &&
           !isId(obj[key]) &&
           !isDate(obj[key])
         ) {
@@ -87,7 +88,7 @@ export default class DataSet {
               isId(obj[key]) || isDate(obj[key])
                 ? obj[key].toString()
                 : obj[key];
-            if (this.indexes[`${_path}${key}`][v] != undefined) {
+            if (this.indexes[`${_path}${key}`][v] !== undefined) {
             } else {
               this.indexes[`${_path}${key}`][v] = [];
             }
@@ -98,7 +99,7 @@ export default class DataSet {
                 ? obj[key].toString()
                 : obj[key];
             this.indexes[`${_path}${key}`] = {};
-            if (this.indexes[`${_path}${key}`][v] != undefined) {
+            if (this.indexes[`${_path}${key}`][v] !== undefined) {
             } else {
               this.indexes[`${_path}${key}`][v] = [];
             }
@@ -116,6 +117,7 @@ export default class DataSet {
       for (let key in obj) {
         if (
           typeof obj[key] == "object" &&
+          obj[key] !== null &&
           !isId(obj[key]) &&
           !isDate(obj[key])
         ) {
@@ -124,13 +126,13 @@ export default class DataSet {
           this.index(_obj, path?.length ? `${path}.${p}` : p);
         } else {
           let _path = path?.length ? `${path}.` : "";
-          if (this.indexes[`${_path}${key}`]) {
+          if (this.indexes[`${_path}${key}`] !== undefined) {
             let k = this.counter;
             let v =
               isId(obj[key]) || isDate(obj[key])
                 ? obj[key].toString()
                 : obj[key];
-            if (this.indexes[`${_path}${key}`][v] != undefined) {
+            if (this.indexes[`${_path}${key}`][v] !== undefined) {
               this.indexes[`${_path}${key}`][v].push(k);
             } else {
               this.indexes[`${_path}${key}`][v] = [k];
@@ -143,7 +145,7 @@ export default class DataSet {
                   ? obj[key].toString()
                   : obj[key];
               this.indexes[`${_path}${key}`] = {};
-              if (this.indexes[`${_path}${key}`][v] != undefined) {
+              if (this.indexes[`${_path}${key}`][v] !== undefined) {
                 this.indexes[`${_path}${key}`][v].push(k);
               } else {
                 this.indexes[`${_path}${key}`][v] = [k];
@@ -165,6 +167,7 @@ export default class DataSet {
       for (let key in obj) {
         if (
           typeof obj[key] == "object" &&
+          obj[key] !== null &&
           !isId(obj[key]) &&
           !isDate(obj[key])
         ) {
@@ -179,7 +182,7 @@ export default class DataSet {
               isId(obj[key]) || isDate(obj[key])
                 ? obj[key].toString()
                 : obj[key];
-            if (this.indexes[`${_path}${key}`][v]) {
+            if (this.indexes[`${_path}${key}`][v] !== undefined) {
               this.stores.push(this.indexes[`${_path}${key}`][v]);
             } else {
               this.stores.push([]);
