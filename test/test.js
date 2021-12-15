@@ -3,7 +3,7 @@ import DATA from "./data.js";
 import DataSet from "./../lib/index.js";
 //DATA.splice(5, DATA.length - 1);
 //console.log(DATA);
-let ObjectId = (d) => mongodb.ObjectId; // Types.ObjectId(d); //d.toString()
+let ObjectId = mongodb.ObjectId; // Types.ObjectId(d); //d.toString()
 console.log("full length", DATA.length);
 
 console.time("loading");

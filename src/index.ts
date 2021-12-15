@@ -1,7 +1,7 @@
 const oId = /^[a-f\d]{24}$/i;
 function isId(id: any) {
   try {
-    return oId.test(id.toString());
+    return oId.test(id.toString().replace('ObjectId("', "").replace('"', ""));
   } catch (e) {
     return false;
   }
@@ -227,7 +227,7 @@ export default class DataSet {
       let res: any[] = [];
       this.res.forEach((i: number) => res.push(this.db[i]));
       this.stores = [];
-      this.options.found ? this.found.add(...this.res) : 0;
+      this.options.found && this.res.length ? this.found.add(...this.res) : 0;
       this.res = [];
       return res;
     } catch (e) {
