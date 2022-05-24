@@ -1,7 +1,7 @@
 {
   "name": "data-set-query",
   "description": "Data set querying via hasing and indexing with Auto Index ability",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "homepage": "",
   "keywords": [],
   "author": {
@@ -9,7 +9,7 @@
     "email": "mohammad.khamis@corpapp.com"
   },
   "contributors": [],
-  "main": "lib",
+  "main": "lib/index.js",
   "type": "module",
   "bugs": {},
   "directories": {},
